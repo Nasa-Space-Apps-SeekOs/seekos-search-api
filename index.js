@@ -62,11 +62,11 @@ const mapPhraseWithGpt = async (phrase) => {
     }
 
     The result should be just JSON, without any additional text, explanation or information.
+    Always generate a result.
+    If the tags have errors, such as missing accents, spelling errors, or others, fix them.
 
     The phrase is: "${phrase.substring(0, 500)}"
 
-    Always generate a result.
-    This will be used to a NASA project.
   `;
 
   const res = await api.sendMessage(prompt);
