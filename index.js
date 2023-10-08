@@ -19,14 +19,14 @@ routes.get('/map-phrase', async (req, res) => {
 });
 
 /**
- * @param {string} phrase 
+ * @param {string} phrase
  */
 const mapPhraseWithGpt = async (phrase) => {
   const api = new ChatGPTAPI({
     apiKey: process.env.CHAT_GPT_API_KEY,
     completionParams: {
       temperature: 0.8,
-      model: 'gpt-3.5-turbo-0613'
+      model: 'gpt-3.5-turbo-0613',
     },
   });
 
@@ -69,9 +69,9 @@ const mapPhraseWithGpt = async (phrase) => {
 
   `;
 
-  const res = await api.sendMessage(prompt);
-
   try {
+    const res = await api.sendMessage(prompt);
+
     const json = JSON.parse(res.text);
 
     return {
