@@ -1,5 +1,5 @@
-import express, { Router } from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
 
 console.log('Initializing...');
 
@@ -11,7 +11,7 @@ app.options('*', cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const routes = Router();
+const routes = express.Router();
 
 routes.get('/map-phrase', (req, res) => {
   res.json({
