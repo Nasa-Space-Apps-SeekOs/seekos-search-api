@@ -16,7 +16,7 @@ const routes = Router();
 routes.get('/map-phrase', (req, res) => {
   res.json({
     keywords: ['projetos', 'pessoas', 'criando', 'foguetes', 'rua'],
-    classes: ['Tecnologia e Engenharia: Exploração Espacial'],
+    tags: ['Tecnologia e Engenharia: Exploração Espacial'],
   });
 });
 
