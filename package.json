@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "CHAT_GPT_API_KEY=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 node index.js"
   },
   "type": "module",
   "author": "",
