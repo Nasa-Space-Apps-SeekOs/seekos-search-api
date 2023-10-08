@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "CHAT_GPT_API_KEY=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 node index.js"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chatgpt": "^5.2.5",
     "cors": "^2.8.5",
     "express": "^4.18.2"
   },
