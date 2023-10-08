@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { ChatGPTAPI } from 'chatgpt';
+import axios from 'axios';
 
 console.log('Initializing...');
 
@@ -30,7 +31,10 @@ const mapPhraseWithGpt = async (phrase) => {
     },
   });
 
-  const prompt = `
+  try {
+    const tags = await getAllTags();
+
+    const prompt = `
     You are a sentence interpreter.
 
     I will tell you a sentence and you must interpret it and extract the following information:
@@ -38,21 +42,7 @@ const mapPhraseWithGpt = async (phrase) => {
     - Key words in the sentence. These keywords will be used to search a database
 
     - Classify the phrase in the following tags (it can contain more than one if necessary):
-    Biology
-    Chemical
-    Physical
-    Astronomy and Cosmology
-    Earth Sciences
-    environmental Sciences
-    Social Sciences
-    Technology and Engineering
-    Health and Medicine
-    Mathematics and Statistics
-    information Science
-    Food Science and Nutrition
-    Social Sciences and Digital Humanities
-    Neuroscience
-    Education sciences
+${tags.map((t) => '    -- ' + t.name).join('\n')}
 
     The result must be JSON following the following pattern:
 
@@ -66,10 +56,8 @@ const mapPhraseWithGpt = async (phrase) => {
     If the tags have errors, such as missing accents, spelling errors, or others, fix them.
 
     The phrase is: "${phrase.substring(0, 500)}"
+    `;
 
-  `;
-
-  try {
     const res = await api.sendMessage(prompt);
 
     const json = JSON.parse(res.text);
@@ -85,6 +73,12 @@ const mapPhraseWithGpt = async (phrase) => {
     };
   }
 };
+
+/**
+ * @returns {Promise<{ name: string }[]>}
+ */
+const getAllTags = async () =>
+  (await axios.get('https://seekos-api.onrender.com/keys/')).data;
 
 app.use(routes);
 
