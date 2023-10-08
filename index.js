@@ -15,20 +15,18 @@ app.use(express.json());
 const routes = express.Router();
 
 routes.get('/map-phrase', async (req, res) => {
-  //   res.json({
-  //     keywords: ['projetos', 'pessoas', 'criando', 'foguetes', 'rua'],
-  //     tags: ['Tecnologia e Engenharia: Exploração Espacial'],
-  //   });
-
-  res.send(await mapPhraseWithGpt(req.query.value));
+  res.json(await mapPhraseWithGpt(req.query.value));
 });
 
+/**
+ * @param {string} phrase 
+ */
 const mapPhraseWithGpt = async (phrase) => {
   const api = new ChatGPTAPI({
     apiKey: process.env.CHAT_GPT_API_KEY,
     completionParams: {
       temperature: 0.8,
-      model: 'gpt-3.5-turbo-0613',
+      model: 'gpt-3.5-turbo-0613'
     },
   });
 
@@ -65,7 +63,7 @@ const mapPhraseWithGpt = async (phrase) => {
 
     The result should be just JSON, without any additional text, explanation or information.
 
-    The phrase is: "${phrase}"
+    The phrase is: "${phrase.substring(0, 500)}"
 
     Always generate a result.
     This will be used to a NASA project.
@@ -73,7 +71,19 @@ const mapPhraseWithGpt = async (phrase) => {
 
   const res = await api.sendMessage(prompt);
 
-  return res.text;
+  try {
+    const json = JSON.parse(res.text);
+
+    return {
+      keywords: json.keywords || [],
+      tags: json.tags || [],
+    };
+  } catch {
+    return {
+      keywords: [],
+      tags: [],
+    };
+  }
 };
 
 app.use(routes);
