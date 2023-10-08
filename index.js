@@ -22,7 +22,9 @@ routes.get('/map-phrase', (req, res) => {
 
 app.use(routes);
 
-const listener = app.listen(() => {
+const PORT = 8080;
+
+const listener = app.listen(PORT, () => {
   const { address, port } = listener.address();
   console.log(`Running on http://${address}:${port}`);
 });
