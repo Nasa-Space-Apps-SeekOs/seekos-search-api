@@ -16,6 +16,7 @@ app.use(express.json());
 const routes = express.Router();
 
 routes.get('/map-phrase', async (req, res) => {
+  console.log('GET /map-phrase', { query: req.query });
   res.json(await mapPhraseWithGpt(req.query.value));
 });
 
@@ -58,15 +59,27 @@ ${tags.map((t) => '    -- ' + t.name).join('\n')}
     The phrase is: "${phrase.substring(0, 500)}"
     `;
 
+    console.log('GPT sending...', { phrase });
+    console.time('time');
+
     const res = await api.sendMessage(prompt);
+
+    console.timeEnd('time');
 
     const json = JSON.parse(res.text);
 
-    return {
+    console.log('GPT ok', { res: json });
+
+    const result = {
       keywords: json.keywords || [],
       tags: json.tags || [],
     };
-  } catch {
+
+    console.log('RETURN', { result });
+
+    return result;
+  } catch (error) {
+    console.error(error);
     return {
       keywords: [],
       tags: [],
